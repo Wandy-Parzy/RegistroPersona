@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.widget.DatePicker
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -58,13 +59,13 @@ fun PersonaScreen() {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        PersonaCase()
+        PersonaInterface()
     }
 }
 
 @Preview(showSystemUi = true)
 @Composable
-fun PersonaCase(viewModel: PersonaViewModel = hiltViewModel()) {
+fun PersonaInterface(viewModel: PersonaViewModel = hiltViewModel()) {
     Column(modifier = Modifier) {
         Spacer(modifier = Modifier.padding(20.dp))
         Text(
@@ -96,6 +97,7 @@ fun PersonaCase(viewModel: PersonaViewModel = hiltViewModel()) {
     }
 }
 
+//Campo nombre
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NombreCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel()) {
@@ -103,11 +105,15 @@ fun NombreCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel()
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
     OutlinedTextField(
-        modifier = Modifier
-            .size(330.dp, 60.dp)
-            .fillMaxWidth(),
         value = viewModel.nombre,
         onValueChange = viewModel::onNombreChanged,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(70.dp)
+            .padding(5.dp)
+            .onGloballyPositioned { coordinates ->
+                textfieldSize = coordinates.size.toSize()
+            },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Person,
@@ -137,6 +143,7 @@ fun NombreCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel()
 
 }
 
+//Campo telefono
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelefonoCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel()) {
@@ -151,7 +158,6 @@ fun TelefonoCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel
             .height(70.dp)
             .padding(5.dp)
             .onGloballyPositioned { coordinates ->
-                //This value is used to assign to the DropDown the same width
                 textfieldSize = coordinates.size.toSize()
             },
         label = { Text("Telefono", fontSize = 19.sp) },
@@ -161,6 +167,7 @@ fun TelefonoCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel
     )
 }
 
+//Campo celular
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CelularCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel()) {
@@ -190,7 +197,7 @@ fun CelularCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel(
         )
     )
 }
-
+//Campo email
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmailCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel()) {
@@ -205,13 +212,12 @@ fun EmailCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel())
             .height(70.dp)
             .padding(5.dp)
             .onGloballyPositioned { coordinates ->
-                //This value is used to assign to the DropDown the same width
                 textfieldSize = coordinates.size.toSize()
             },
         label = { Text("Email", fontSize = 19.sp) }
     )
 }
-
+//Campo direccion
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DirecciónCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel()) {
@@ -226,14 +232,13 @@ fun DirecciónCase(modifier: Modifier, viewModel: PersonaViewModel = hiltViewMod
             .height(70.dp)
             .padding(5.dp)
             .onGloballyPositioned { coordinates ->
-                //This value is used to assign to the DropDown the same width
                 textfieldSize = coordinates.size.toSize()
             },
         label = { Text("Dirección", fontSize = 19.sp) }
     )
 }
 
-
+//Campo fecha
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FechaCase(
@@ -275,22 +280,20 @@ fun FechaCase(
                         .clickable { mDatePickerDialog.show() }
                 )
             },
-            label = { Text(text = "Fecha", fontSize = 19.sp) }
+            label = { Text(text = "Fecha de nacimiento", fontSize = 19.sp) }
         )
     }
 }
 
-
+//Lista de ocupaciones
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectOcupacionesCase(modifier: Modifier) {
 
     var expanded by remember { mutableStateOf(false) }
-
-    val suggestions = listOf("Profesor", "Comediante", "Contable", "Doctor")
+    val suggestions = listOf("Ingeniero", "Arquitecto", "Enfermera/o", "Pintor")
 
     var selectedText by remember { mutableStateOf("") }
-
     var textfieldSize by remember { mutableStateOf(Size.Zero) }
 
     val icon = if (expanded)
@@ -306,7 +309,7 @@ fun SelectOcupacionesCase(modifier: Modifier) {
             .height(70.dp)
             .padding(5.dp)
             .onGloballyPositioned { coordinates ->
-                //This value is used to assign to the DropDown the same width
+
                 textfieldSize = coordinates.size.toSize()
             },
         label = { Text("Selecciona ocupacion", fontSize = 19.sp) },
@@ -328,6 +331,7 @@ fun SelectOcupacionesCase(modifier: Modifier) {
     }
 }
 
+//Boton gurdar
 @Composable
 fun ButtonGuardar(modifier: Modifier, viewModel: PersonaViewModel = hiltViewModel()) {
 
@@ -342,7 +346,7 @@ fun ButtonGuardar(modifier: Modifier, viewModel: PersonaViewModel = hiltViewMode
             .width(50.dp),
         shape = RoundedCornerShape(20),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFD5A20AA),
+            containerColor = Color(0xFF156619),
             contentColor = Color.White,
             disabledContentColor = Color.White,
         ),
@@ -366,9 +370,9 @@ private fun PersonaListScreen(personaList: List<PersonaEntity>) {
         }
     }
 }
+//lista de personas
 @Composable
 private fun PersonaRow(persona: PersonaEntity) {
-    var color = Color.Black
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -387,10 +391,25 @@ private fun PersonaRow(persona: PersonaEntity) {
                 modifier = Modifier.weight(1f)
             )
 
+
+            Spacer(
+                modifier = Modifier
+                    .width(1.dp)
+                    .fillMaxHeight()
+                    .background(Color.Gray)
+            )
+
             Text(
                 text = persona.telefono,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.weight(1f)
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .width(1.dp)
+                    .fillMaxHeight()
+                    .background(Color.Gray)
             )
 
             Text(
@@ -399,16 +418,37 @@ private fun PersonaRow(persona: PersonaEntity) {
                 modifier = Modifier.weight(1f)
             )
 
+            Spacer(
+                modifier = Modifier
+                    .width(1.dp)
+                    .fillMaxHeight()
+                    .background(Color.Gray)
+            )
+
             Text(
                 text = persona.email,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.weight(1f)
             )
 
+            Spacer(
+                modifier = Modifier
+                    .width(1.dp)
+                    .fillMaxHeight()
+                    .background(Color.Gray)
+            )
+
             Text(
                 text = persona.direccion,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.weight(1f)
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .width(1.dp)
+                    .fillMaxHeight()
+                    .background(Color.Gray)
             )
 
             Text(
@@ -418,6 +458,5 @@ private fun PersonaRow(persona: PersonaEntity) {
             )
         }
         Divider(Modifier.fillMaxWidth())
-            color = Color.Black // Puedes ajustar el color de la barra horizontal aquí
     }
 }
